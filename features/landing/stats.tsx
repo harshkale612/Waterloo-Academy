@@ -169,13 +169,13 @@ export function LandingStats() {
           transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         >
           <p className="text-xs font-bold uppercase tracking-[0.2em] text-red-500 mb-3">
-            By the numbers
+            The Club
           </p>
           <h2 className="text-3xl sm:text-4xl font-extrabold text-foreground leading-tight">
             Waterloo County Rugby at a Glance
           </h2>
           <p className="mt-3 text-base text-muted-foreground max-w-xl mx-auto">
-            From Flag Rugby for the youngest players to Senior competitive sides — a club built for the entire community.
+            One of Ontario&apos;s most active community rugby clubs — 12 teams, hundreds of players, and a home for rugby at every age.
           </p>
         </motion.div>
 

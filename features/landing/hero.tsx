@@ -2,225 +2,168 @@
 
 import { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
-import {
-  ChevronRight,
-  ArrowRight,
-  Users,
-  Calendar,
-  Trophy,
-  BarChart3,
-  LayoutDashboard,
-  Settings,
-  Bell,
-  TrendingUp,
-} from 'lucide-react';
+import { ChevronRight, ArrowRight, Shield, MapPin, Calendar, Users } from 'lucide-react';
 import Link from 'next/link';
 
 const EASE = [0.22, 1, 0.36, 1] as [number, number, number, number];
-
 const BRAND = '#DC2626';
-const BRAND_LIGHT = '#EF4444';
 const ACCENT = '#F59E0B';
 
-// ─── Data ─────────────────────────────────────────────────────────────────────
+const HEADLINE_LINES = [
+  { text: 'WATERLOO', variant: 'outline' as const, delay: 0.1 },
+  { text: 'COUNTY', variant: 'solid' as const, delay: 0.19 },
+  { text: 'RUGBY.', variant: 'gradient' as const, delay: 0.28 },
+];
 
-const FEATURE_PILLS = [
-  { label: 'Player Management', icon: Users, color: '#3B82F6' },
-  { label: 'Fixture Scheduling', icon: Calendar, color: ACCENT },
-  { label: 'Live Standings', icon: Trophy, color: '#10B981' },
-  { label: 'Analytics', icon: BarChart3, color: BRAND },
+const CLUB_PILLS = [
+  { label: 'Rugby Ontario', icon: Shield, color: BRAND },
+  { label: 'Rugby Canada', icon: Shield, color: '#3B82F6' },
+  { label: 'Waterloo, ON', icon: MapPin, color: '#10B981' },
+  { label: '2026 Season Open', icon: Calendar, color: ACCENT },
 ] as const;
 
 const TRUST_STATS = [
   { value: '300+', label: 'Registered Players' },
   { value: '12', label: 'Active Teams' },
-  { value: '10+', label: 'Sponsors & Partners' },
+  { value: 'U8–Senior', label: 'All Age Groups' },
 ];
 
-const DASH_STATS = [
-  { label: 'Players', value: '312', color: '#3B82F6' },
-  { label: 'Matches', value: '11/16', color: ACCENT },
-  { label: 'Position', value: '1st', color: '#10B981' },
-  { label: 'Win Rate', value: '72%', color: BRAND },
+const DIVISION_CARDS = [
+  {
+    label: 'Senior Men',
+    sub: 'County Senior Men 2026',
+    color: '#DC2626',
+    wins: '7W 1D 1L',
+    pos: '1st Place',
+  },
+  {
+    label: 'Senior Women',
+    sub: 'County Senior Women 2026',
+    color: '#DB2777',
+    wins: '5W 0D 2L',
+    pos: '2nd Place',
+  },
+  {
+    label: 'U18 Men',
+    sub: 'County U18 Men 2026',
+    color: '#3B82F6',
+    wins: '6W 1D 2L',
+    pos: '1st Place',
+  },
+  {
+    label: 'U16 Boys',
+    sub: 'County U16 Boys 2026',
+    color: '#F59E0B',
+    wins: '4W 2D 2L',
+    pos: '3rd Place',
+  },
 ];
 
-const TABLE_ROWS = [
-  { pos: 1, club: 'Waterloo County', pts: 48, wins: 11, isYou: true },
-  { pos: 2, club: 'Hamilton RFC', pts: 41, wins: 9, isYou: false },
-  { pos: 3, club: 'Ottawa Wolves', pts: 37, wins: 8, isYou: false },
-  { pos: 4, club: 'Barrie RFC', pts: 31, wins: 7, isYou: false },
-];
+// ─── Club Dashboard Mock ──────────────────────────────────────────────────────
 
-const PLAYER_CARDS = [
-  { name: 'Matt Kowalski', pos: 'Fly-half', metric: '16 tries', color: '#3B82F6' },
-  { name: 'Ryan O\'Brien', pos: 'Tighthead Prop', metric: '92% scrums', color: '#10B981' },
-];
-
-const NAV_ICONS = [LayoutDashboard, Users, Calendar, Trophy] as const;
-
-const HEADLINE_LINES = [
-  { text: 'RUN YOUR', variant: 'outline' as const, delay: 0.1 },
-  { text: 'RUGBY CLUB', variant: 'solid' as const, delay: 0.19 },
-  { text: 'BETTER.', variant: 'gradient' as const, delay: 0.28 },
-];
-
-// ─── App window (mock product UI) ────────────────────────────────────────────
-
-function AppWindow() {
+function ClubDashboard() {
   return (
-    <div className="flex overflow-hidden" style={{ height: 440, background: '#080C18' }}>
-      {/* Sidebar */}
+    <div
+      className="flex flex-col overflow-hidden"
+      style={{ height: 440, background: '#080C18' }}
+    >
+      {/* Top bar */}
       <div
-        className="flex flex-col items-center pt-4 gap-3 border-r border-white/5 flex-shrink-0"
-        style={{ width: 60, background: '#060A14' }}
+        className="flex items-center justify-between px-4 py-3 border-b border-white/5 flex-shrink-0"
+        style={{ background: '#060A14' }}
       >
-        <div
-          className="w-8 h-8 rounded-xl flex-shrink-0"
-          style={{ background: `linear-gradient(135deg, ${BRAND}, ${ACCENT})` }}
-        />
-        <div className="flex flex-col items-center gap-3 mt-2">
-          {NAV_ICONS.map((Icon, i) => (
-            <div
-              key={i}
-              className="w-9 h-9 rounded-xl flex items-center justify-center"
-              style={
-                i === 0
-                  ? { background: 'rgba(220,38,38,0.15)', border: '1px solid rgba(220,38,38,0.3)' }
-                  : undefined
-              }
-            >
-              <Icon
-                suppressHydrationWarning
-                size={16}
-                style={{ color: i === 0 ? BRAND_LIGHT : '#334155' }}
-              />
-            </div>
-          ))}
+        <div className="flex items-center gap-2">
+          <div
+            className="w-7 h-7 rounded-lg flex items-center justify-center"
+            style={{ background: `linear-gradient(135deg, ${BRAND}, ${ACCENT})` }}
+          >
+            <Shield className="w-3.5 h-3.5 text-white" />
+          </div>
+          <div className="flex flex-col leading-none">
+            <span className="text-[10px] font-black text-white tracking-tight">WATERLOO COUNTY</span>
+            <span className="text-[8px] text-red-400 tracking-widest uppercase">Rugby Club</span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+          <span className="text-[9px] text-emerald-400 font-medium">2026 Season Live</span>
         </div>
       </div>
 
-      {/* Main panel */}
-      <div className="flex-1 p-4 flex flex-col gap-3 overflow-hidden">
-        {/* Header row */}
-        <div className="flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-1.5">
-            <div className="h-2.5 rounded bg-white/10" style={{ width: 52 }} />
-            <div className="h-2.5 rounded" style={{ width: 36, background: 'rgba(255,255,255,0.06)' }} />
-          </div>
-          <div className="flex items-center gap-1.5">
-            <Bell suppressHydrationWarning size={12} style={{ color: '#334155' }} />
-            <Settings suppressHydrationWarning size={12} style={{ color: '#334155' }} />
-          </div>
-        </div>
-
-        {/* Stats grid */}
-        <div className="grid grid-cols-4 gap-1.5 flex-shrink-0">
-          {DASH_STATS.map((s) => (
+      {/* Club stats row */}
+      <div className="grid grid-cols-3 gap-1.5 p-3 flex-shrink-0">
+        {[
+          { label: 'Players', value: '312', color: '#3B82F6' },
+          { label: 'Teams', value: '12', color: ACCENT },
+          { label: 'Division', value: '1st', color: '#10B981' },
+        ].map((s) => (
+          <div
+            key={s.label}
+            className="rounded-lg p-2 border border-white/5 relative overflow-hidden"
+            style={{ background: 'rgba(255,255,255,0.02)' }}
+          >
             <div
-              key={s.label}
-              className="rounded-lg p-2 border border-white/5 relative overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.02)' }}
-            >
-              <div
-                className="absolute top-0 left-0 right-0 h-0.5 rounded-t-lg"
-                style={{ background: `linear-gradient(90deg, ${s.color}, transparent)` }}
-              />
-              <div className="text-[13px] font-black leading-none" style={{ color: s.color }}>
-                {s.value}
-              </div>
-              <div className="text-[9px] mt-1 leading-none" style={{ color: '#475569' }}>
-                {s.label}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Data table card */}
-        <div
-          className="rounded-xl border border-white/5 overflow-hidden flex-shrink-0"
-          style={{ background: 'rgba(255,255,255,0.02)' }}
-        >
-          <div className="flex items-center gap-1.5 px-2 py-1.5 border-b border-white/[0.025]">
-            <Trophy suppressHydrationWarning size={10} style={{ color: ACCENT }} />
-            <div className="h-2 rounded bg-white/10" style={{ width: 52 }} />
-            <div
-              className="ml-auto h-2 rounded"
-              style={{ width: 32, background: 'rgba(220,38,38,0.2)' }}
+              className="absolute top-0 left-0 right-0 h-0.5 rounded-t-lg"
+              style={{ background: `linear-gradient(90deg, ${s.color}, transparent)` }}
             />
+            <div className="text-[14px] font-black leading-none" style={{ color: s.color }}>
+              {s.value}
+            </div>
+            <div className="text-[9px] mt-1 leading-none" style={{ color: '#475569' }}>
+              {s.label}
+            </div>
           </div>
-          {TABLE_ROWS.map((row, i) => (
-            <div
-              key={row.club}
-              className="flex items-center gap-2 px-3 relative"
-              style={{
-                height: 34,
-                background: row.isYou ? 'rgba(220,38,38,0.07)' : undefined,
-                borderBottom:
-                  i < TABLE_ROWS.length - 1 ? '1px solid rgba(255,255,255,0.025)' : undefined,
-              }}
-            >
-              {row.isYou && (
-                <div
-                  className="absolute left-0 top-0 bottom-0 w-0.5 rounded-r"
-                  style={{ background: BRAND }}
-                />
-              )}
-              <span
-                className="text-[10px] font-bold w-3 text-center flex-shrink-0"
-                style={{ color: row.isYou ? BRAND_LIGHT : '#475569' }}
-              >
-                {row.pos}
-              </span>
-              <span
-                className="text-[10px] flex-1 truncate"
-                style={{ color: row.isYou ? '#f9fafb' : '#64748B' }}
-              >
-                {row.club}
-              </span>
-              <span
-                className="text-[10px] font-bold flex-shrink-0"
-                style={{ color: row.isYou ? BRAND_LIGHT : '#475569' }}
-              >
-                {row.pts}
-              </span>
-              <span className="text-[10px] flex-shrink-0" style={{ color: '#334155' }}>
-                {row.wins}W
-              </span>
-            </div>
-          ))}
-        </div>
+        ))}
+      </div>
 
-        {/* Player cards */}
-        <div className="grid grid-cols-2 gap-1.5 flex-1 min-h-0">
-          {PLAYER_CARDS.map((p) => (
+      {/* Team cards */}
+      <div className="flex-1 overflow-hidden px-3 pb-3 grid grid-cols-2 gap-1.5 content-start">
+        {DIVISION_CARDS.map((team) => (
+          <div
+            key={team.label}
+            className="rounded-xl border border-white/5 p-2.5 flex flex-col gap-2 relative overflow-hidden"
+            style={{ background: 'rgba(255,255,255,0.025)' }}
+          >
             <div
-              key={p.name}
-              className="rounded-lg p-2 border border-white/5 flex items-center gap-2 overflow-hidden"
-              style={{ background: 'rgba(255,255,255,0.02)' }}
-            >
+              className="absolute top-0 left-0 right-0 h-0.5 rounded-t-xl"
+              style={{ background: `linear-gradient(90deg, ${team.color}, transparent)` }}
+            />
+            <div className="flex items-center gap-1.5">
               <div
-                className="w-8 h-8 rounded-full flex-shrink-0 flex items-center justify-center text-[9px] font-bold text-white"
-                style={{ background: p.color }}
+                className="w-6 h-6 rounded-full flex items-center justify-center text-[9px] font-black text-white flex-shrink-0"
+                style={{ background: team.color }}
               >
-                {p.name[0]}
+                {team.label.split(' ')[0][0]}{team.label.includes('Women') || team.label.includes('Girls') ? 'W' : 'M'}
               </div>
-              <div className="flex-1 min-w-0">
-                <div className="text-[11px] font-semibold text-white truncate leading-none">
-                  {p.name}
-                </div>
-                <div className="text-[10px] mt-1 truncate leading-none" style={{ color: '#475569' }}>
-                  {p.pos}
-                </div>
-              </div>
-              <div className="flex-shrink-0 flex items-center gap-1">
-                <TrendingUp suppressHydrationWarning size={10} style={{ color: '#10B981' }} />
-                <span className="text-[10px] font-bold" style={{ color: '#10B981' }}>
-                  {p.metric}
-                </span>
+              <div className="min-w-0">
+                <div className="text-[10px] font-bold text-white truncate leading-none">{team.label}</div>
+                <div className="text-[8px] mt-0.5 truncate leading-none" style={{ color: '#475569' }}>{team.sub}</div>
               </div>
             </div>
-          ))}
+            <div className="flex items-center justify-between">
+              <span className="text-[9px]" style={{ color: '#475569' }}>{team.wins}</span>
+              <span
+                className="text-[9px] font-bold px-1.5 py-0.5 rounded-full"
+                style={{ background: `${team.color}20`, color: team.color }}
+              >
+                {team.pos}
+              </span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Upcoming fixture strip */}
+      <div
+        className="flex items-center gap-3 px-3 py-2.5 border-t border-white/5 flex-shrink-0"
+        style={{ background: 'rgba(220,38,38,0.06)' }}
+      >
+        <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse flex-shrink-0" />
+        <div className="flex-1 min-w-0">
+          <div className="text-[10px] font-semibold text-white truncate">County Senior Men vs Hamilton RFC</div>
+          <div className="text-[9px]" style={{ color: '#475569' }}>Next fixture · Bluevale Park, Waterloo</div>
         </div>
+        <div className="text-[9px] font-bold flex-shrink-0" style={{ color: ACCENT }}>SAT</div>
       </div>
     </div>
   );
@@ -239,19 +182,19 @@ function BrowserWindow() {
         <div className="flex-1 flex justify-center">
           <div
             className="flex items-center gap-1.5 px-2.5 py-1 rounded-md border border-white/[0.06]"
-            style={{ background: 'rgba(255,255,255,0.04)', maxWidth: 220, width: '100%' }}
+            style={{ background: 'rgba(255,255,255,0.04)', maxWidth: 240, width: '100%' }}
           >
             <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
             <span
               className="text-[10px] truncate"
               style={{ color: '#475569', fontFamily: 'var(--font-geist-mono)' }}
             >
-              youinsports.ca/dashboard
+              waterloocountyrugby.youinsports.ca
             </span>
           </div>
         </div>
       </div>
-      <AppWindow />
+      <ClubDashboard />
     </div>
   );
 }
@@ -275,67 +218,36 @@ export function LandingHero() {
       className="relative min-h-screen overflow-hidden"
       style={{ background: 'var(--hero-section-bg)' }}
     >
-      {/* Background with parallax */}
-      <motion.div
-        className="absolute inset-0 pointer-events-none"
-        style={{ y: bgY }}
-        aria-hidden
-      >
-        {/* Primary brand orb — top-left */}
+      {/* Background */}
+      <motion.div className="absolute inset-0 pointer-events-none" style={{ y: bgY }} aria-hidden>
         <div
           className="absolute"
           style={{
-            top: 0,
-            left: 0,
-            width: '65%',
-            height: '70%',
+            top: 0, left: 0, width: '65%', height: '70%',
             background: 'radial-gradient(ellipse at top left, rgba(220,38,38,0.22), transparent 70%)',
             filter: 'blur(72px)',
           }}
         />
-        {/* Secondary accent orb — top-right */}
         <div
           className="absolute"
           style={{
-            top: 0,
-            right: 0,
-            width: '45%',
-            height: '55%',
+            top: 0, right: 0, width: '45%', height: '55%',
             background: 'radial-gradient(ellipse at top right, rgba(245,158,11,0.07), transparent 70%)',
             filter: 'blur(80px)',
           }}
         />
-        {/* Dot grid */}
         <div className="absolute inset-0 grid-pattern" style={{ opacity: 0.35 }} />
-        {/* FractalNoise texture */}
-        <svg
-          className="absolute inset-0 w-full h-full"
-          style={{ opacity: 0.04, mixBlendMode: 'overlay' }}
-          aria-hidden
-        >
+        <svg className="absolute inset-0 w-full h-full" style={{ opacity: 0.04, mixBlendMode: 'overlay' }} aria-hidden>
           <defs>
             <filter id="hero-noise">
-              <feTurbulence
-                type="fractalNoise"
-                baseFrequency="0.65"
-                numOctaves="3"
-                stitchTiles="stitch"
-              />
+              <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
             </filter>
-            <pattern
-              id="hero-noise-tile"
-              x="0"
-              y="0"
-              width="200"
-              height="200"
-              patternUnits="userSpaceOnUse"
-            >
+            <pattern id="hero-noise-tile" x="0" y="0" width="200" height="200" patternUnits="userSpaceOnUse">
               <rect width="200" height="200" filter="url(#hero-noise)" />
             </pattern>
           </defs>
           <rect width="100%" height="100%" fill="url(#hero-noise-tile)" />
         </svg>
-        {/* Bottom fade */}
         <div
           className="absolute bottom-0 left-0 right-0"
           style={{ height: 160, background: 'linear-gradient(to bottom, transparent, var(--hero-section-bg))' }}
@@ -349,7 +261,7 @@ export function LandingHero() {
           {/* ── Left column ── */}
           <motion.div className="flex flex-col gap-6" style={{ y: contentY }}>
 
-            {/* 1. Status badge */}
+            {/* Badge */}
             <motion.div
               className="inline-flex items-center gap-2 self-start px-3.5 py-2 rounded-full border border-border backdrop-blur-sm bg-background/50"
               initial={{ opacity: 0, y: 16 }}
@@ -358,12 +270,12 @@ export function LandingHero() {
             >
               <div className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
               <span className="uppercase text-[11px] tracking-[0.2em] text-muted-foreground font-medium">
-                Platform Now Live
+                2026 Season · Registration Open
               </span>
-              <ChevronRight suppressHydrationWarning size={13} className="text-muted-foreground" />
+              <ChevronRight size={13} className="text-muted-foreground" suppressHydrationWarning />
             </motion.div>
 
-            {/* 2. Headline — staggered line reveal */}
+            {/* Headline */}
             <h1 className="flex flex-col leading-none">
               {HEADLINE_LINES.map((line) => (
                 <div key={line.text} className="overflow-hidden">
@@ -394,36 +306,35 @@ export function LandingHero() {
               ))}
             </h1>
 
-            {/* 3. Subtitle */}
+            {/* Subtitle */}
             <motion.p
               className="text-muted-foreground text-base sm:text-lg leading-relaxed max-w-md"
               initial={{ opacity: 0, y: 14 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, ease: EASE, delay: 0.42 }}
             >
-              One platform for player rosters, fixtures, live standings, and
-              performance analytics. Everything your club needs — nothing it doesn't.
+              A community rugby club in Waterloo, Ontario welcoming players of all ages and abilities — from U8 Flag Rugby to Senior competitive sides.
             </motion.p>
 
-            {/* 4. Feature pills */}
+            {/* Affiliation pills */}
             <motion.div
               className="flex flex-wrap gap-2"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.55, ease: EASE, delay: 0.52 }}
             >
-              {FEATURE_PILLS.map(({ label, icon: Icon, color }) => (
+              {CLUB_PILLS.map(({ label, icon: Icon, color }) => (
                 <span
                   key={label}
                   className="flex items-center gap-1.5 px-3 py-1.5 rounded-full border border-border/50 text-xs font-medium text-muted-foreground transition-colors duration-200 hover:border-border hover:text-foreground cursor-default bg-background/50"
                 >
-                  <Icon suppressHydrationWarning size={13} style={{ color }} />
+                  <Icon size={13} style={{ color }} suppressHydrationWarning />
                   {label}
                 </span>
               ))}
             </motion.div>
 
-            {/* 5. CTA buttons */}
+            {/* CTA buttons */}
             <motion.div
               className="flex flex-col sm:flex-row gap-3"
               initial={{ opacity: 0, y: 10 }}
@@ -436,18 +347,20 @@ export function LandingHero() {
                 transition={{ duration: 0.15, ease: EASE }}
                 className="group"
               >
-                <Link
-                  href="/auth/signup"
+                <a
+                  href="https://playhq.com/ca/rugby-canada/register/21b765"
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl font-bold text-white transition-opacity duration-200 hover:opacity-90"
                   style={{ background: BRAND, boxShadow: '0 20px 40px rgba(220,38,38,0.5)' }}
                 >
-                  Start Free Trial
+                  Register for 2026
                   <ArrowRight
-                    suppressHydrationWarning
                     size={18}
                     className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    suppressHydrationWarning
                   />
-                </Link>
+                </a>
               </motion.div>
               <motion.div
                 whileHover={{ scale: 1.01 }}
@@ -456,20 +369,20 @@ export function LandingHero() {
                 className="group"
               >
                 <Link
-                  href="/dashboard"
+                  href="#teams"
                   className="flex items-center justify-center gap-2 px-8 py-4 rounded-xl text-muted-foreground border border-border transition-all duration-200 hover:text-foreground hover:border-border/80 hover:bg-secondary/50"
                 >
-                  View Demo
+                  Explore Teams
                   <ChevronRight
-                    suppressHydrationWarning
                     size={18}
                     className="transition-transform duration-200 group-hover:translate-x-0.5"
+                    suppressHydrationWarning
                   />
                 </Link>
               </motion.div>
             </motion.div>
 
-            {/* 6. Trust strip */}
+            {/* Trust strip */}
             <motion.div
               className="flex items-center gap-5 pt-2"
               initial={{ opacity: 0 }}
@@ -492,43 +405,30 @@ export function LandingHero() {
 
           {/* ── Right column — desktop only ── */}
           <motion.div className="hidden lg:block relative lg:mt-14" style={{ y: rightY }}>
-            {/* Ambient glow behind window */}
+            {/* Ambient glow */}
             <div
               className="absolute -inset-12 pointer-events-none rounded-3xl"
               style={{
-                background:
-                  'radial-gradient(ellipse at center, rgba(220,38,38,0.15), rgba(245,158,11,0.07), transparent 70%)',
+                background: 'radial-gradient(ellipse at center, rgba(220,38,38,0.15), rgba(245,158,11,0.07), transparent 70%)',
                 filter: 'blur(24px)',
               }}
               aria-hidden
             />
 
-            {/* Floating chip 1 — top-right: social proof */}
+            {/* Floating chip — top-right: next match */}
             <motion.div
               className="absolute -top-4 -right-6 z-20 flex items-center gap-2 px-3 py-2 rounded-full border border-border shadow-2xl backdrop-blur-md bg-card/95"
               initial={{ opacity: 0, y: 10, scale: 0.9 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ duration: 0.55, ease: EASE, delay: 1.05 }}
             >
-              <div className="flex items-center -space-x-1.5">
-                {(['#3B82F6', '#10B981', '#F59E0B'] as const).map((c, i) => (
-                  <div
-                    key={i}
-                    className="w-5 h-5 rounded-full flex-shrink-0"
-                    style={{
-                      background: c,
-                      border: '2px solid rgb(9,14,28)',
-                    }}
-                  />
-                ))}
-              </div>
-              <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+              <div className="w-1.5 h-1.5 rounded-full bg-red-500 animate-pulse" />
               <span className="text-[11px] font-medium text-muted-foreground whitespace-nowrap">
-                12 clubs joined today
+                2026 Season Underway
               </span>
             </motion.div>
 
-            {/* Floating chip 2 — bottom-left: key metric */}
+            {/* Floating chip — bottom-left: players */}
             <motion.div
               className="absolute -bottom-5 -left-6 z-20 flex items-center gap-2.5 p-3 rounded-2xl border border-border shadow-2xl backdrop-blur-md bg-card/95"
               initial={{ opacity: 0, x: -12, y: 10 }}
@@ -537,20 +437,15 @@ export function LandingHero() {
             >
               <div
                 className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0"
-                style={{
-                  background: 'rgba(16,185,129,0.15)',
-                  border: '1px solid rgba(16,185,129,0.3)',
-                }}
+                style={{ background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)' }}
               >
-                <TrendingUp suppressHydrationWarning size={14} style={{ color: '#10B981' }} />
+                <Users size={14} style={{ color: '#10B981' }} suppressHydrationWarning />
               </div>
               <div>
-                <div className="text-[10px] text-muted-foreground font-medium leading-none">
-                  Win Rate this season
-                </div>
+                <div className="text-[10px] text-muted-foreground font-medium leading-none">Registered Players</div>
                 <div className="text-sm font-black text-foreground leading-tight mt-0.5">
-                  68%{' '}
-                  <span style={{ color: '#10B981' }}>↑ +5%</span>
+                  300+{' '}
+                  <span style={{ color: '#10B981' }}>↑ 2026</span>
                 </div>
               </div>
             </motion.div>

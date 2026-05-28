@@ -4,15 +4,18 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Menu, X, Trophy } from 'lucide-react';
+import { Menu, X, Shield } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { ThemeToggle } from '@/components/ui/theme-toggle';
 import { cn } from '@/lib/utils';
 
 const navLinks = [
   { label: 'Home', href: '/' },
-  { label: 'Clubs', href: '/clubs' },
-  { label: 'Leagues', href: '/leagues' },
+  { label: 'Teams', href: '#teams' },
+  { label: 'Fixtures', href: '#fixtures' },
+  { label: 'News', href: '#news' },
+  { label: 'Sponsors', href: '#sponsors' },
+  { label: 'Contact', href: '#contact' },
 ];
 
 export function Navbar() {
@@ -41,18 +44,23 @@ export function Navbar() {
         <div className="flex items-center justify-between h-16">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
-            <div className="h-8 w-8 rounded-lg bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg group-hover:shadow-red-600/30 transition-shadow">
-              <Trophy className="h-4 w-4 text-white" />
+            <div className="h-9 w-9 rounded-lg bg-linear-to-br from-red-600 to-red-700 flex items-center justify-center shadow-lg group-hover:shadow-red-600/30 transition-shadow">
+              <Shield className="h-5 w-5 text-white" />
             </div>
-            <span className="font-bold text-lg text-foreground tracking-tight">
-              Rugby<span className="text-red-500">OS</span>
-            </span>
+            <div className="flex flex-col leading-none">
+              <span className="font-black text-sm text-foreground tracking-tight uppercase">
+                Waterloo County
+              </span>
+              <span className="font-bold text-[10px] text-red-500 tracking-[0.15em] uppercase">
+                Rugby Club
+              </span>
+            </div>
           </Link>
 
           {/* Desktop Nav */}
           <div className="hidden md:flex items-center gap-1">
             {navLinks.map((link) => {
-              const isActive = link.href === '/' ? pathname === '/' : link.href.startsWith('/') && pathname?.startsWith(link.href);
+              const isActive = link.href === '/' ? pathname === '/' : false;
               return (
                 <Link
                   key={link.href}
@@ -73,16 +81,17 @@ export function Navbar() {
             })}
           </div>
 
-          {/* Right side: ThemeToggle + CTA */}
+          {/* Right side: ThemeToggle + Join CTA */}
           <div className="hidden md:flex items-center gap-2">
             <ThemeToggle />
             <div className="w-px h-5 bg-border mx-1" />
-            <Link href="/auth/login">
-              <Button variant="ghost" size="sm">Log in</Button>
-            </Link>
-            <Link href="/auth/signup">
-              <Button variant="primary" size="sm">Start Free Trial</Button>
-            </Link>
+            <a
+              href="https://playhq.com/ca/rugby-canada/register/21b765"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Button variant="primary" size="sm">Join the Club</Button>
+            </a>
           </div>
 
           {/* Mobile: ThemeToggle + hamburger */}
@@ -108,32 +117,25 @@ export function Navbar() {
             className="md:hidden glass border-t border-border/50"
           >
             <div className="px-4 py-3 space-y-1">
-              {navLinks.map((link) => {
-                const isActive = link.href === '/' ? pathname === '/' : link.href.startsWith('/') && pathname?.startsWith(link.href);
-                return (
-                  <Link
-                    key={link.href}
-                    href={link.href}
-                    onClick={() => setIsOpen(false)}
-                    className={cn(
-                      'flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors',
-                      isActive
-                        ? 'text-foreground bg-foreground/8 font-medium'
-                        : 'text-muted-foreground hover:text-foreground hover:bg-foreground/5'
-                    )}
-                  >
-                    {isActive && <span className="w-1 h-1 rounded-full bg-red-500 shrink-0" />}
-                    {link.label}
-                  </Link>
-                );
-              })}
-              <div className="pt-2 flex flex-col gap-2">
-                <Link href="/auth/login" onClick={() => setIsOpen(false)}>
-                  <Button variant="secondary" size="md" className="w-full">Log in</Button>
+              {navLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setIsOpen(false)}
+                  className="flex items-center gap-2 px-3 py-2 text-sm rounded-lg transition-colors text-muted-foreground hover:text-foreground hover:bg-foreground/5"
+                >
+                  {link.label}
                 </Link>
-                <Link href="/auth/signup" onClick={() => setIsOpen(false)}>
-                  <Button variant="primary" size="md" className="w-full">Start Free Trial</Button>
-                </Link>
+              ))}
+              <div className="pt-2">
+                <a
+                  href="https://playhq.com/ca/rugby-canada/register/21b765"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <Button variant="primary" size="md" className="w-full">Join the Club</Button>
+                </a>
               </div>
             </div>
           </motion.div>

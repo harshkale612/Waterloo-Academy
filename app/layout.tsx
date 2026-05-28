@@ -15,10 +15,10 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'RugbyOS — The Club Management Platform for Canadian Rugby',
+  title: 'Waterloo County Rugby Club — Waterloo, Ontario',
   description:
-    'RugbyOS is the all-in-one platform for managing rugby clubs, teams, players, fixtures, and leagues. Built for Canadian rugby organisations.',
-  keywords: 'rugby club management, Canadian rugby, rugby software, rugby platform, team management',
+    'Waterloo County Rugby Club — community rugby for all ages in Waterloo, Ontario. Senior Men, Senior Women, Junior and Minor divisions from U8 Flag Rugby to competitive Senior sides. Affiliated with Rugby Canada and Rugby Ontario.',
+  keywords: 'Waterloo County Rugby, Waterloo rugby club, Rugby Ontario, rugby Waterloo Ontario, junior rugby Waterloo, senior rugby Ontario',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

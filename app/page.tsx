@@ -1,6 +1,6 @@
 import { LandingHero } from '@/features/landing/hero';
 import { LandingStats } from '@/features/landing/stats';
-import { LandingFeatures } from '@/features/landing/features';
+import { LandingAbout } from '@/features/landing/about';
 import { LandingTeams } from '@/features/landing/teams';
 import { LandingFixtures } from '@/features/landing/fixtures';
 import { LandingStandings } from '@/features/landing/standings';
@@ -15,7 +15,7 @@ export default function HomePage() {
     <main className="overflow-hidden">
       <LandingHero />
       <LandingStats />
-      <LandingFeatures />
+      <LandingAbout />
       <LandingTeams />
       <LandingFixtures />
       <LandingStandings />

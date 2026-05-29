@@ -1,0 +1,207 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  /* Rugby Club Brand Colors */
+  --color-navy: #1A2744;
+  --color-navy-dark: #0D1421;
+  --color-navy-mid: #243560;
+  --color-gold: #D4AF37;
+  --color-gold-light: #E8CC6A;
+  --color-green: #2E7D32;
+  --color-green-light: #4CAF50;
+  --color-warm-white: #F8F6F0;
+  --color-dark-text: #1C1C1C;
+  --color-muted-text: #5A5A5A;
+  --color-error: #C62828;
+  --color-success: #2E7D32;
+
+  /* Shadcn tokens mapped to rugby palette */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-inter);
+  --font-heading: var(--font-bebas);
+  --font-mono: var(--font-geist-mono);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+}
+
+:root {
+  --background: #F8F6F0;
+  --foreground: #1C1C1C;
+  --card: #FFFFFF;
+  --card-foreground: #1C1C1C;
+  --popover: #FFFFFF;
+  --popover-foreground: #1C1C1C;
+  --primary: #1A2744;
+  --primary-foreground: #F8F6F0;
+  --secondary: #D4AF37;
+  --secondary-foreground: #1A2744;
+  --muted: #EEE9DF;
+  --muted-foreground: #5A5A5A;
+  --accent: #2E7D32;
+  --accent-foreground: #FFFFFF;
+  --destructive: #C62828;
+  --border: #DDD8CE;
+  --input: #DDD8CE;
+  --ring: #D4AF37;
+  --chart-1: #1A2744;
+  --chart-2: #D4AF37;
+  --chart-3: #2E7D32;
+  --chart-4: #C62828;
+  --chart-5: #5A5A5A;
+  --radius: 0.5rem;
+  --sidebar: #1A2744;
+  --sidebar-foreground: #F8F6F0;
+  --sidebar-primary: #D4AF37;
+  --sidebar-primary-foreground: #1A2744;
+  --sidebar-accent: #243560;
+  --sidebar-accent-foreground: #F8F6F0;
+  --sidebar-border: #243560;
+  --sidebar-ring: #D4AF37;
+}
+
+.dark {
+  --background: #0D1421;
+  --foreground: #F0EDE6;
+  --card: #1A2744;
+  --card-foreground: #F0EDE6;
+  --popover: #1A2744;
+  --popover-foreground: #F0EDE6;
+  --primary: #D4AF37;
+  --primary-foreground: #1A2744;
+  --secondary: #243560;
+  --secondary-foreground: #F0EDE6;
+  --muted: #1E2D50;
+  --muted-foreground: #A8A8A8;
+  --accent: #2E7D32;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF5350;
+  --border: #2A3A60;
+  --input: #2A3A60;
+  --ring: #D4AF37;
+  --chart-1: #D4AF37;
+  --chart-2: #4CAF50;
+  --chart-3: #64B5F6;
+  --chart-4: #EF9A9A;
+  --chart-5: #A8A8A8;
+  --sidebar: #0D1421;
+  --sidebar-foreground: #F0EDE6;
+  --sidebar-primary: #D4AF37;
+  --sidebar-primary-foreground: #1A2744;
+  --sidebar-accent: #1A2744;
+  --sidebar-accent-foreground: #F0EDE6;
+  --sidebar-border: #1A2744;
+  --sidebar-ring: #D4AF37;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-inter, Inter, sans-serif);
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-bebas, 'Bebas Neue', sans-serif);
+    letter-spacing: 0.02em;
+  }
+}
+
+/* Rugby-specific utility classes */
+@layer utilities {
+  .font-display {
+    font-family: var(--font-bebas, 'Bebas Neue', sans-serif);
+    letter-spacing: 0.03em;
+  }
+  .text-navy { color: #1A2744; }
+  .text-gold { color: #D4AF37; }
+  .text-grass { color: #2E7D32; }
+  .bg-navy { background-color: #1A2744; }
+  .bg-navy-dark { background-color: #0D1421; }
+  .bg-navy-mid { background-color: #243560; }
+  .bg-gold { background-color: #D4AF37; }
+  .bg-grass { background-color: #2E7D32; }
+  .bg-warm-white { background-color: #F8F6F0; }
+  .border-gold { border-color: #D4AF37; }
+  .border-navy { border-color: #1A2744; }
+
+  .hero-gradient {
+    background: linear-gradient(135deg, rgba(13,20,33,0.92) 0%, rgba(26,39,68,0.85) 50%, rgba(26,39,68,0.70) 100%);
+  }
+
+  .gold-gradient {
+    background: linear-gradient(135deg, #D4AF37 0%, #E8CC6A 50%, #D4AF37 100%);
+  }
+
+  .section-padding {
+    @apply px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Focus styles */
+*:focus-visible {
+  outline: 2px solid #D4AF37;
+  outline-offset: 2px;
+}
+
+/* Skip to content */
+.skip-to-content {
+  @apply sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-gold focus:text-navy focus:font-bold focus:rounded;
+}
+
+/* Scroll behavior */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #F8F6F0; }
+::-webkit-scrollbar-thumb { background: #1A2744; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #D4AF37; }
